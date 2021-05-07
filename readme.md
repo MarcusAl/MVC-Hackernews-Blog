@@ -7,7 +7,7 @@
 # Hackernews Blog
 In this project, I have created a simple Terminal App. The data is stored via SQL, and CRUD actions are implemented using Ruby code.
 
-<img align="right" alt="GIF" height="160px" src="https://media.giphy.com/media/3o85xu3OLHOVvzZNra/giphy.gif" />
+<img align="right" alt="GIF" height="160px" src="https://media.giphy.com/media/lQO3dG0scKkkRAY5GN/giphy.gif" />
 
 ## Built With Ruby
 

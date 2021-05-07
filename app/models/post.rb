@@ -1,4 +1,5 @@
 require 'sqlite3'
+DB = SQLite3::Database.new("./db/posts.db")
 class Post
   # TODO: Gather all code from all previous exercises
   # - reader and accessors
@@ -15,7 +16,6 @@ class Post
     @title = attr[:title] || nil
     @url = attr[:url] || nil
     @votes = attr[:votes] || 0
-    @db = SQLite3::Database.new("./db/posts.db")
   end
 
   def find(id)
@@ -23,7 +23,7 @@ class Post
     SELECT * FROM posts
     WHERE id = "#{id}"
     SQL
-    exec = @db.execute(query).flatten
+    exec = DB.execute(query).flatten
     if exec.empty?
       return nil
     else
@@ -33,7 +33,7 @@ class Post
 
   def all
     array = []
-    array_database = @db.execute('SELECT * FROM posts')
+    array_database = DB.execute('SELECT * FROM posts')
     array_database.each do |ar|
       array << Post.new({ id: ar[0], title: ar[1], url: ar[2], votes: ar[3] })
     end
@@ -41,16 +41,16 @@ class Post
   end
 
   def save
-    @db.execute(
+    DB.execute(
       <<-SQL
       INSERT INTO posts (title, url, votes) VALUES ("#{@title}", "#{@url}","#{@votes}")
       SQL
     )
-    @id = @db.last_insert_row_id
+    @id = DB.last_insert_row_id
   end
 
   def update
-    @db.execute(
+    DB.execute(
       <<-SQL
       UPDATE posts
       SET title = "#{@title}" , url = "#{url}", votes = "#{votes}"
@@ -61,6 +61,16 @@ class Post
 
   def destroy(id)
     # Destroys the current instance from the database
-    @db.execute("DELETE FROM posts WHERE id = #{id}")
+    DB.execute("DELETE FROM posts WHERE id = #{id}")
   end
 end
+
+# Correct save code
+# def save
+#   if @id.nil?
+#     DB.execute("INSERT INTO posts (url, votes, title) VALUES (?, ?, ?)", @url, @votes, @title)
+#     @id = DB.last_insert_row_id
+#   else
+#     DB.execute("UPDATE posts SET url = ?, votes = ?, title = ? WHERE id = ?", @url, @votes, @title, @id)
+#   end
+# end

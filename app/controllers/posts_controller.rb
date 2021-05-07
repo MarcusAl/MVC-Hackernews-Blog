@@ -52,9 +52,13 @@ class PostsController
   def upvote
     # Adds an upvote counter to a post
     upvote_id = @view.ask_user("Which post would you like to upvote?").to_i
-    post = @post.find(upvote_id)
-    post.votes += 1
-    post.update
+    DB.execute(
+      <<-SQL
+      UPDATE posts
+      SET votes = votes + 1
+      WHERE id = "#{upvote_id}"
+      SQL
+    )
   end
 end
 
